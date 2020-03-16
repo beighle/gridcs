@@ -6,7 +6,10 @@
 #include <sys/socket.h>
 #include <sys/select.h>
 #include <unistd.h>
-
+#include <iostream>
+#include <fstream>
+#include <sys/stat.h>
+#include <unistd.h>
 #include "FileDesc.h"
 #include "strfuncts.h"
 
@@ -301,6 +304,11 @@ void TermFD::setEchoFD(bool echo) {
 
 
 FileFD::FileFD(const char *filename):FileDesc(), _filename(filename) {
+
+	//if the file doesn't exist create it
+	if ( access( filename, F_OK ) == -1 ) {
+		std::ofstream outfile (filename);
+	}
 
 }
 

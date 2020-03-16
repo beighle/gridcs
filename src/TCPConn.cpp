@@ -228,7 +228,7 @@ void TCPConn::sendMenu()
 	//menustr += "  5). 25 digits: 3829387463527123647384769, returns: 29*41*15413*2798639*74664368503\n";
 	menustr += "  Enter a number to be factored: \n";
 	menustr += "  Menu - display this menu\n";
-	menustr += "  Exit - disconnect.\n\n";
+	menustr += "  Exit - disconnect.\n";
 
 	_connfd.writeFD(menustr);
 }

@@ -22,7 +22,7 @@ void displayHelp(const char *execname) {
 }
 
 // global default values
-const unsigned short default_port = 9999;
+const unsigned short default_port = 5050;
 const char default_IP[] = "127.0.0.1";
 
 int main(int argc, char *argv[]) {

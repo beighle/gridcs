@@ -98,6 +98,8 @@ void TCPClient::handleConnection() {
          // Display to the screen
          if (rsize > 0) {
             printf("%s", buf.c_str());
+            std::string str = "\nEnter choice:";
+            printf("%s", str.c_str());
             fflush(stdout);
             blockUserInput = false;
          }
