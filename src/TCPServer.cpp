@@ -168,29 +168,43 @@ void TCPServer::listenToClients()
 				break;
 			}
 
-			// connect it to a client via the map, then send the response to that client
 			if (rsize > 0) {
+				cout << "There is a response from coord...\n";
 				std::string response = buf.c_str();
 				std::string left, right;
+				std::string err = "Error handling factors: Main Server";
 				bool bValid = split(response, left, right, '|');
 				if (bValid) {
 					bValid = split(right, left, right, '|'); //now we have clientId in the left
 					if (bValid) {
 						// Loop through our client connections to find out which one to send the msg to
-						std::list<std::unique_ptr<TCPConn>>::iterator tptr =
-								_connClientList.begin();
+						std::list<std::unique_ptr<TCPConn>>::iterator tptr = _connClientList.begin();
 						while (tptr != _connClientList.end()) {
 							std::string clientId = left;
+							cout << "clientId = " << clientId << "\n";
 							if ((*tptr)->id == clientId) {
 								//if lost connection
 								if (!(*tptr)->isConnected())
-									std::cout
-											<< "This client has disconnected.\n";
-								//send it to client
-								(*tptr)->sendText(response.c_str());
-								buf.erase(0, response.length());
+									std::cout << "This client has disconnected.\n";
+								//isolate the factors to send back to the client
+								bValid = split(response, left, response, '|');//clean off command
+								if (bValid)
+									bValid = split(response, left, response, '|');//clean off id
+								if (bValid)
+									bValid = split(response, left, response, '|');//clean off the original number
+								if (bValid) {
+									response = "Prime Factors: " + response;
+									//send it to client
+									(*tptr)->sendText(response.c_str());
+									buf.erase(0, response.length());
+								} else {
+									(*tptr)->sendText(err.c_str());
+									buf.erase(0, err.length());
+								}
 								break;
 							}
+							// Increment our iterator
+							tptr++;
 						}
 					}
 				}
